@@ -14,7 +14,7 @@ FSJS project 2 - List Filter and Pagination
  * // the total number of pages we should see based on number of students per page and the size of the student array
  * ***/
 const students = document.querySelectorAll('.student-item');
-const studentsPerPage = 10;
+const studentsPerPage = 25;
 const ulToUpdate = document.querySelector('.student-list');
 const numberOfPages = Math.ceil(students.length / studentsPerPage);
 
@@ -73,6 +73,18 @@ window.onload = () => {
    showPage(1);
 }
 
+/***
+ * Marks currently selected page in pagination as 'active', which adds css styling and lets user know what page they're on
+ */
 const markCurrentPageAsActive = (currentPage) => {
    console.log(currentPage);
+   const listItems = document.getElementsByClassName('pag-btn');
+   for (let i = 0; i< listItems.length; i++) {
+      const listItem = listItems[i];
+      const listItemId = listItem.id.slice(listItem.id.length - 1);
+      listItem.className = listItem.className.replace('active', '');
+      if (listItemId === currentPage) {
+         listItem.className = 'active pag-btn';
+      }
+   };
 }

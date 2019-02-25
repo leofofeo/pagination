@@ -136,7 +136,7 @@ body{
 
 .btns-pagination li.active {
   font-weight: bold;
-  border-radius: 1px;
+  border: 1px solid powderblue;
 }
 
 .btns-pagination li:hover {
