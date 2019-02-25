@@ -117,3 +117,28 @@ body{
       background-color: #4ba6c3;
       color: #fff;
     }
+
+.btns-pagination {
+  display: flex;
+  flex-flow: wrap;
+  align-items: center;
+  margin-top: 20px;
+  justify-content: center;
+}
+
+.btns-pagination li {
+  border: .5px solid powderblue;
+  padding: 5px;
+  font-weight: normal;
+  color: black;
+  margin: 5px;
+}
+
+.btns-pagination li.active {
+  font-weight: bold;
+  border-radius: 1px;
+}
+
+.btns-pagination li:hover {
+  cursor: pointer;
+}

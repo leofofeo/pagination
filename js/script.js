@@ -7,44 +7,72 @@ FSJS project 2 - List Filter and Pagination
 
 
 /*** 
-   Add your global variables that store the DOM elements you will 
-   need to reference and/or manipulate. 
-   
-   But be mindful of which variables should be global and which 
-   should be locally scoped to one of the two main functions you're 
-   going to create. A good general rule of thumb is if the variable 
-   will only be used inside of a function, then it can be locally 
-   scoped to that function.
-***/
-
-
-
-
-/*** 
-   Create the `showPage` function to hide all of the items in the 
-   list except for the ten you want to show.
-
-   Pro Tips: 
-     - Keep in mind that with a list of 54 students, the last page 
-       will only display four.
-     - Remember that the first student has an index of 0.
-     - Remember that a function `parameter` goes in the parens when 
-       you initially define the function, and it acts as a variable 
-       or a placeholder to represent the actual function `argument` 
-       that will be passed into the parens later when you call or 
-       "invoke" the function 
-***/
-
+ * Establishing global variables:
+ * // Student array
+ * // number of students we should see per page
+ * // HTML element where content should be replaced/updated
+ * // the total number of pages we should see based on number of students per page and the size of the student array
+ * ***/
+const students = document.querySelectorAll('.student-item');
+const studentsPerPage = 10;
+const ulToUpdate = document.querySelector('.student-list');
+const numberOfPages = Math.ceil(students.length / studentsPerPage);
 
 
 
 /*** 
-   Create the `appendPageLinks function` to generate, append, and add 
-   functionality to the pagination buttons.
+ * showPage creates a pageRange array to mark the lower and upper bound of the student indeces that should be displayed using the number of students per page and the selected page based on the currently selected page (e.g., page 4 should only show students whose indeces are 30-39).
+ * 
+ * The ul element is then reset, and we iterate through the students array, appending only the students whose indeces fall within the pageRange boundaries established
+ * */ 
+const showPage = (selectedPage) => {
+   markCurrentPageAsActive(selectedPage);
+   selectedPage = parseInt(selectedPage);
+   const pageRange = [(studentsPerPage * selectedPage) - 10 , (studentsPerPage * selectedPage) - 1];
+
+   ulToUpdate.innerHTML = '';
+
+   students.forEach((student, index) => {
+      if (index >= pageRange[0] && index <= pageRange[1]) {
+         ulToUpdate.append(student);
+      }
+   })
+}
+
+/*** 
+  appendPageLinks creates a ul of the number of li's necessary for the number of pages (based on the global variable calculation above) and then appends the required li's with the right ids and classes for use later with styling and for other functions
 ***/
+const appendPageLinks = () => {
+   const buttons = document.createElement('ul');
+   buttons.className = 'btns-pagination';
+   buttons.id = 'pagination-btns';
+   for (let i = 1; i <= numberOfPages; i ++) {
+      const listItem = document.createElement('li');
+      listItem.innerHTML = i;
+      listItem.id = 'button_' + i;
+      listItem.className = 'pag-btn';
+      buttons.append(listItem);
 
+   }
+   document.querySelector('.page').append(buttons);
+}
 
+ /*** 
+  * On load, add pagination buttons to the page with appendPageLinks, and load the first batch of students by calling showPage with argument 1. Each li element crated in appendPageLinks also receives an eventListener for clicking, which in turn calls showPage and passes in the li's id so that showPage knows which student range to display
+  * */
+window.onload = () => {
+   appendPageLinks();
+   const listItems = document.getElementsByClassName('pag-btn');
+   console.log(listItems);
+   for (var i = 0; i < listItems.length; i++) {
+      listItems[i].addEventListener('click', function(e) {
+         const selectedPage = e.target.id.slice(e.target.id.length - 1);
+         showPage(selectedPage);
+      });
+   }
+   showPage(1);
+}
 
-
-
-// Remember to delete the comments that came with this file, and replace them with your own code comments.
+const markCurrentPageAsActive = (currentPage) => {
+   console.log(currentPage);
+}
