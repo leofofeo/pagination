@@ -2,9 +2,6 @@
 Treehouse Techdegree:
 FSJS project 2 - List Filter and Pagination
 ******************************************/
-   
-// Study guide for this project - https://drive.google.com/file/d/1OD1diUsTMdpfMDv677TfL1xO2CEkykSz/view?usp=sharing
-
 
 /*** 
  * Establishing global variables:
@@ -14,11 +11,10 @@ FSJS project 2 - List Filter and Pagination
  * // the total number of pages we should see based on number of students per page and the size of the student array
  * ***/
 const students = document.querySelectorAll('.student-item');
-const studentsPerPage = 25;
+const studentsPerPage = 10;
 const ulToUpdate = document.querySelector('.student-list');
 const numberOfPages = Math.ceil(students.length / studentsPerPage);
-
-
+console.log(numberOfPages);
 
 /*** 
  * showPage creates a pageRange array to mark the lower and upper bound of the student indeces that should be displayed using the number of students per page and the selected page based on the currently selected page (e.g., page 4 should only show students whose indeces are 30-39).
@@ -28,12 +24,15 @@ const numberOfPages = Math.ceil(students.length / studentsPerPage);
 const showPage = (selectedPage) => {
    markCurrentPageAsActive(selectedPage);
    selectedPage = parseInt(selectedPage);
-   const pageRange = [(studentsPerPage * selectedPage) - 10 , (studentsPerPage * selectedPage) - 1];
-
+   const pageRange = [(studentsPerPage * selectedPage) - studentsPerPage , (studentsPerPage * selectedPage) - 1];
+   console.log('page range: ', pageRange[0], '-', pageRange[1]);
+   console.log('selected page: ', selectedPage);
+   console.log('students per page: ', studentsPerPage);
    ulToUpdate.innerHTML = '';
 
    students.forEach((student, index) => {
       if (index >= pageRange[0] && index <= pageRange[1]) {
+         console.log(index);
          ulToUpdate.append(student);
       }
    })
@@ -49,7 +48,7 @@ const appendPageLinks = () => {
    for (let i = 1; i <= numberOfPages; i ++) {
       const listItem = document.createElement('li');
       listItem.innerHTML = i;
-      listItem.id = 'button_' + i;
+      listItem.id = i + '_btn';
       listItem.className = 'pag-btn';
       buttons.append(listItem);
 
@@ -63,10 +62,9 @@ const appendPageLinks = () => {
 window.onload = () => {
    appendPageLinks();
    const listItems = document.getElementsByClassName('pag-btn');
-   console.log(listItems);
    for (var i = 0; i < listItems.length; i++) {
       listItems[i].addEventListener('click', function(e) {
-         const selectedPage = e.target.id.slice(e.target.id.length - 1);
+         const selectedPage = e.target.id.split('_')[0];
          showPage(selectedPage);
       });
    }
@@ -77,13 +75,13 @@ window.onload = () => {
  * Marks currently selected page in pagination as 'active', which adds css styling and lets user know what page they're on
  */
 const markCurrentPageAsActive = (currentPage) => {
-   console.log(currentPage);
+   currentPage = parseInt(currentPage);
    const listItems = document.getElementsByClassName('pag-btn');
    for (let i = 0; i< listItems.length; i++) {
       const listItem = listItems[i];
-      const listItemId = listItem.id.slice(listItem.id.length - 1);
+      const listItemId = listItem.id.split('_')[0];
       listItem.className = listItem.className.replace('active', '');
-      if (listItemId === currentPage) {
+      if (parseInt(listItemId) === currentPage) {
          listItem.className = 'active pag-btn';
       }
    };
